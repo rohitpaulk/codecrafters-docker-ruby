@@ -1,10 +1,8 @@
 require "open3"
 
-# You can use print statements as follows for debugging, they'll be visible when running tests.
-puts "Logs from your program will appear here!"
-
 command = ARGV[2]
 args = ARGV[3..]
 
-stdout, stderr, status = Open3.capture3(command, *args)
-puts stdout
+stdout, stderr, _status = Open3.capture3(command, *args)
+STDOUT.write(stdout)
+STDERR.write(stderr)
