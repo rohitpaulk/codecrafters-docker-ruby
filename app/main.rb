@@ -15,8 +15,10 @@ chroot_dir = Dir.mktmpdir
 copy_executable_in_directory(command, chroot_dir) if File.exist?(command)
 Dir.chroot(chroot_dir)
 
-stdout, stderr, status = Open3.capture3(command, *args)
-STDOUT.write(stdout)
-STDERR.write(stderr)
+unshare = 272
+clone_newpid = 0x20000000
+Kernel.syscall(unshare, clone_newpid)
 
+pid = Process.spawn(command, *args)
+_, status = Process.waitpid2(pid)
 exit status.exitstatus
